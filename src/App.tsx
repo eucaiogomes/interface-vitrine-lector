@@ -16,7 +16,9 @@ import {
   User,
   Menu,
   X,
-  ThumbsUp
+  ThumbsUp,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 // --- Types ---
@@ -92,6 +94,37 @@ const SECTIONS: Section[] = [
         thumb: 'https://picsum.photos/seed/course3/400/225',
         price: 'Gratuito',
         authors: 'QA Team'
+      },
+      {
+        id: 'c10',
+        title: 'Introdução à Liderança',
+        description: 'Desenvolva habilidades essenciais para liderar equipes de alta performance.',
+        type: 'COURSE',
+        thumb: 'https://picsum.photos/seed/course10/400/225',
+        duration: '02h30m',
+        rating: 4.8,
+        students: 340,
+        authors: 'Maria Oliveira'
+      },
+      {
+        id: 'c11',
+        title: 'Gestão de Tempo',
+        description: 'Técnicas avançadas para otimizar sua rotina e aumentar a produtividade.',
+        type: 'COURSE',
+        thumb: 'https://picsum.photos/seed/course11/400/225',
+        duration: '01h45m',
+        price: 'R$29,90',
+        authors: 'Carlos Mendes'
+      },
+      {
+        id: 'c12',
+        title: 'Comunicação Assertiva',
+        description: 'Como se expressar com clareza e objetividade no ambiente corporativo.',
+        type: 'COURSE',
+        thumb: 'https://picsum.photos/seed/course12/400/225',
+        duration: '03h00m',
+        rating: 4.9,
+        authors: 'Ana Costa'
       }
     ]
   },
@@ -122,6 +155,26 @@ const SECTIONS: Section[] = [
         type: 'COURSE',
         thumb: 'https://picsum.photos/seed/course6/400/225',
         price: 'R$1,00'
+      },
+      {
+        id: 'c13',
+        title: 'Design Thinking na Prática',
+        description: 'Aprenda a aplicar o Design Thinking para resolver problemas complexos.',
+        type: 'COURSE',
+        thumb: 'https://picsum.photos/seed/course13/400/225',
+        duration: '04h00m',
+        rating: 4.7,
+        authors: 'Equipe de Inovação'
+      },
+      {
+        id: 'c14',
+        title: 'Análise de Dados Básica',
+        description: 'Fundamentos de análise de dados para tomada de decisão.',
+        type: 'COURSE',
+        thumb: 'https://picsum.photos/seed/course14/400/225',
+        duration: '05h30m',
+        price: 'R$49,90',
+        authors: 'João Pedro'
       }
     ]
   },
@@ -152,6 +205,36 @@ const SECTIONS: Section[] = [
         description: 'Materiais de apoio para estudos.',
         type: 'COURSE',
         thumb: 'https://picsum.photos/seed/course9/400/225'
+      },
+      {
+        id: 'c15',
+        title: 'Marketing Digital B2B',
+        description: 'Estratégias avançadas de marketing para empresas B2B.',
+        type: 'COURSE',
+        thumb: 'https://picsum.photos/seed/course15/400/225',
+        duration: '06h00m',
+        rating: 4.6,
+        authors: 'Laura Silva'
+      },
+      {
+        id: 'c16',
+        title: 'Vendas Complexas',
+        description: 'Como conduzir negociações longas e de alto valor.',
+        type: 'COURSE',
+        thumb: 'https://picsum.photos/seed/course16/400/225',
+        duration: '08h00m',
+        price: 'R$99,90',
+        authors: 'Roberto Almeida'
+      },
+      {
+        id: 'c17',
+        title: 'Customer Success',
+        description: 'Garantindo o sucesso e a retenção dos seus clientes.',
+        type: 'COURSE',
+        thumb: 'https://picsum.photos/seed/course17/400/225',
+        duration: '03h15m',
+        rating: 4.9,
+        authors: 'Fernanda Lima'
       }
     ]
   }
@@ -554,7 +637,7 @@ const ContentCard: React.FC<{ item: ContentItem }> = ({ item }) => {
   return (
     <motion.div
       whileHover={{ y: -4 }}
-      className="flex-shrink-0 w-64 bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col cursor-pointer"
+      className="flex-shrink-0 w-[80vw] sm:w-64 bg-white rounded-xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 flex flex-col cursor-pointer"
     >
       <div className="relative h-36 overflow-hidden">
         <img 
@@ -682,11 +765,11 @@ const ContentSection: React.FC<{ section: Section }> = ({ section }) => {
         
         <div 
           id={`scroll-${section.id}`}
-          className="flex gap-4 overflow-x-auto pb-6 scrollbar-hide snap-x"
+          className="flex gap-4 overflow-x-auto pb-6 scrollbar-hide snap-x snap-mandatory pr-[20vw] sm:pr-[10vw]"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {section.items.map((item) => (
-            <div key={item.id} className="snap-start">
+            <div key={item.id} className="snap-start shrink-0">
               <ContentCard item={item} />
             </div>
           ))}
@@ -783,7 +866,7 @@ const THEMES = [
   { id: 'orange', primary: '#ea580c', secondary: '#9a3412', accent: '#fb923c' },
 ];
 
-const ThemeSwitcher = () => {
+const ThemeSwitcher = ({ showSocial, onToggleSocial }: { showSocial: boolean, onToggleSocial: () => void }) => {
   const [activeTheme, setActiveTheme] = useState('blue');
 
   const applyTheme = (theme: typeof THEMES[0]) => {
@@ -810,12 +893,23 @@ const ThemeSwitcher = () => {
           aria-label={`Mudar para tema ${theme.id}`}
         />
       ))}
+      
+      <div className="w-px h-5 bg-gray-200 mx-1" />
+      
+      <button
+        onClick={onToggleSocial}
+        className="p-1.5 rounded-full hover:bg-gray-100 transition-colors text-gray-500"
+        title={showSocial ? "Ocultar Posts" : "Exibir Posts"}
+      >
+        {showSocial ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+      </button>
     </motion.div>
   );
 };
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('Conteúdo');
+  const [showSocialSidebar, setShowSocialSidebar] = useState(true);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -841,9 +935,11 @@ export default function App() {
                     </div>
                     
                     {/* Right Column: Social Sidebar */}
-                    <div className="w-full lg:w-80 xl:w-[400px] flex-shrink-0">
-                      <SocialSidebar onSeeAll={() => setActiveTab('Social')} />
-                    </div>
+                    {showSocialSidebar && (
+                      <div className="w-full lg:w-80 xl:w-[400px] flex-shrink-0">
+                        <SocialSidebar onSeeAll={() => setActiveTab('Social')} />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -874,7 +970,10 @@ export default function App() {
         </AnimatePresence>
       </main>
       <Footer />
-      <ThemeSwitcher />
+      <ThemeSwitcher 
+        showSocial={showSocialSidebar} 
+        onToggleSocial={() => setShowSocialSidebar(!showSocialSidebar)} 
+      />
     </div>
   );
 }
